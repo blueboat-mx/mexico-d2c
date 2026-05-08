@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>멕시코 직구(D2C) 진행 제안 — Blueboat</title>
+<meta name="description" content="Blueboat 인프라를 통한 멕시코 트래픽 → 매출 전환" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #0F0F12;
+    --bg-2: #18181D;
+    --bg-3: #1E1E25;
+    --line: #2A2A33;
+    --line-soft: #22222A;
+    --text: #EFEFF1;
+    --text-soft: #C4C4CC;
+    --muted: #8A8A93;
+    --muted-2: #5E5E66;
+
+    --accent: #FF7A4D;
+    --accent-2: #FF5A8A;
+    --grad-text: linear-gradient(135deg, #FF7A4D 0%, #FF5A8A 100%);
+    --grad-glow: linear-gradient(140deg, rgba(255,122,77,0.18) 0%, rgba(255,90,138,0.06) 60%, transparent 100%);
+
+    --bb: #5D8AFF;
+    --bb-2: #8FAFFF;
+    --bb-deep: #3D6BFF;
+
+    --sans: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+
+    --max: 1180px;
+    --pad: clamp(24px, 5vw, 80px);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.55;
+    letter-spacing: -0.01em;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 800px 600px at 85% -10%, rgba(255,122,77,0.06), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 0% 100%, rgba(93,138,255,0.05), transparent 60%);
+  }
+
+  /* Top bar */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px var(--pad);
+    background: rgba(15,15,18,0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .topbar .brand .logo {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: #1F4BFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .topbar .brand .logo svg { width: 13px; height: 13px; }
+  .topbar .meta {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .topbar .meta .dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-right: 8px;
+    vertical-align: middle;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* Section base */
+  section {
+    position: relative;
+    min-height: 100vh;
+    padding: 130px var(--pad) 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  section.no-border { border-bottom: 0; }
+
+  .container {
+    max-width: var(--max);
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .section-label::before {
+    content: '';
+    width: 36px;
+    height: 1.5px;
+    background: var(--accent);
+    display: inline-block;
+  }
+
+  h1, h2, h3 { font-weight: 400; margin: 0; letter-spacing: -0.025em; }
+
+  .display {
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: clamp(40px, 6vw, 84px);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    color: var(--text);
+  }
+  .display .grad,
+  .grad {
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .body {
+    font-size: clamp(15px, 1.15vw, 17px);
+    line-height: 1.65;
+    color: var(--text-soft);
+  }
+  .small { font-size: 13px; color: var(--muted); line-height: 1.55; }
+  .mono { font-family: var(--mono); font-feature-settings: "tnum"; }
+
+  /* ============================================
+     1p · COVER
+     ============================================ */
+  #cover {
+    padding-top: 150px;
+    padding-bottom: 120px;
+  }
+  #cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle 600px at 80% 20%, rgba(255,122,77,0.08), transparent 60%),
+      radial-gradient(circle 500px at 15% 85%, rgba(93,138,255,0.07), transparent 60%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .cover-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+  .cover-logo-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .cover-logo {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: #1F4BFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 12px 40px -10px rgba(31,75,255,0.55);
+  }
+  .cover-logo svg { width: 32px; height: 32px; }
+  .cover-wordmark {
+    font-weight: 600;
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .cover-title {
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: clamp(40px, 7.8vw, 116px);
+    line-height: 1.0;
+    letter-spacing: -0.045em;
+    color: var(--text);
+  }
+  .cover-sub {
+    font-weight: 400;
+    font-size: clamp(18px, 1.9vw, 24px);
+    color: var(--text-soft);
+    line-height: 1.5;
+    letter-spacing: -0.015em;
+    max-width: 720px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  .cover-sub b {
+    font-weight: 600;
+    color: var(--text);
+  }
+  .cover-sub .arrow {
+    display: inline-block;
+    color: var(--accent);
+    margin: 0 8px;
+    font-weight: 500;
+  }
+
+  /* ============================================
+     2p · CONVERSION (re-designed in HTML)
+     ============================================ */
+  #convert {
+    padding-top: 130px;
+    padding-bottom: 120px;
+  }
+
+  .convert-stage {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 28px;
+    align-items: stretch;
+  }
+  @media (max-width: 980px) {
+    .convert-stage {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .convert-stage .v-arrow {
+      transform: rotate(90deg);
+      justify-self: center;
+      padding: 8px 0;
+    }
+  }
+
+  /* ---- Data card (insight) ---- */
+  .data-card {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .data-card .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .data-card .head .src {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .data-card .head .src .ico {
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .data-card .head .src .ico.ig {
+    background: linear-gradient(135deg, #FFC850 0%, #FF5A5F 30%, #C13584 60%, #833AB4 100%);
+  }
+  .data-card .head .src .ico.yt {
+    background: #FF0033;
+  }
+  .data-card .head .src .ico svg { width: 14px; height: 14px; color: #fff; }
+  .data-card .head .period {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* metric grid */
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 16px;
+  }
+  .metric {
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .metric .label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 4px;
+    letter-spacing: -0.005em;
+  }
+  .metric .val {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .metric .val small {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 11px;
+    margin-left: 4px;
+    color: #6BCB77;
+    vertical-align: middle;
+  }
+
+  /* country row */
+  .country-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 4px;
+  }
+  .country-row {
+    display: grid;
+    grid-template-columns: 22px 1fr auto auto;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 13px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .country-row:last-child { border-bottom: 0; }
+  .country-row.highlight {
+    background: linear-gradient(90deg, rgba(255,122,77,0.12) 0%, rgba(255,122,77,0.02) 100%);
+    border: 1px solid rgba(255,122,77,0.4);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin: 2px 0;
+  }
+  .country-row .rank {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+  }
+  .country-row.highlight .rank {
+    background: var(--accent);
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 0;
+    font-weight: 600;
+  }
+  .country-row .name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .country-row .flag {
+    width: 18px; height: 13px;
+    border-radius: 2px;
+    display: inline-block;
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+  }
+  /* mini flags */
+  .flag.us {
+    background:
+      linear-gradient(180deg, #B22234 0 11%, #fff 11% 22%, #B22234 22% 33%, #fff 33% 44%, #B22234 44% 55%, #fff 55% 66%, #B22234 66% 77%, #fff 77% 88%, #B22234 88% 100%);
+  }
+  .flag.us::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 8px; height: 7px;
+    background: #3C3B6E;
+  }
+  .flag.mx {
+    background: linear-gradient(90deg, #006847 0 33%, #fff 33% 66%, #CE1126 66% 100%);
+  }
+  .flag.kr {
+    background: #fff;
+  }
+  .flag.kr::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, #CD2E3A 0 2.5px, #0047A0 2.5px 4.5px, transparent 4.5px);
+  }
+  .flag.br {
+    background: #009C3B;
+    position: relative;
+  }
+  .flag.br::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 5px; height: 5px;
+    background: #002776;
+    border-radius: 50%;
+  }
+  .country-row .users {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-soft);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .country-row .pct {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-align: right;
+    min-width: 48px;
+  }
+  .country-row.highlight .pct,
+  .country-row.highlight .users {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .data-card .foot {
+    margin-top: 4px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .data-card .foot b { color: var(--text); font-weight: 500; }
+
+  /* ---- Conversion arrow column (middle) ---- */
+  .v-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 0 8px;
+  }
+  .v-arrow .blueboat-node {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: #1F4BFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 40px rgba(31,75,255,0.5);
+    flex-shrink: 0;
+  }
+  .v-arrow .blueboat-node svg { width: 28px; height: 28px; }
+  .v-arrow .label-bb {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bb-2);
+    text-align: center;
+  }
+  .v-arrow .arrow-down,
+  .v-arrow .arrow-up {
+    color: var(--muted-2);
+  }
+  .v-arrow .arrow-down svg,
+  .v-arrow .arrow-up svg {
+    width: 20px; height: 28px;
+  }
+
+  /* ---- Right column: result card stack ---- */
+  .result-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .result-headline {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: clamp(22px, 2.6vw, 32px);
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .result-headline .grad {
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .result-card {
+    background: var(--grad-glow);
+    border: 1px solid rgba(255,122,77,0.4);
+    border-radius: 14px;
+    padding: 22px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .result-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 90% 0%, rgba(255,122,77,0.15), transparent 50%);
+    pointer-events: none;
+  }
+  .result-card .lab {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .result-card .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(255,255,255,0.08);
+    font-size: 13px;
+    position: relative;
+  }
+  .result-card .row:last-of-type { border-bottom: 0; }
+  .result-card .row .k { color: var(--text-soft); }
+  .result-card .row .v {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+  .result-card .row.big .v {
+    font-size: 28px;
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .result-card .note {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+    position: relative;
+  }
+
+  .result-foot {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .result-foot b { color: var(--text); font-weight: 500; }
+
+  /* ============================================
+     3p · FLOW
+     ============================================ */
+  #flow .display { margin-bottom: 18px; }
+  #flow .flow-sub {
+    font-size: clamp(15px, 1.3vw, 18px);
+    color: var(--text-soft);
+    max-width: 720px;
+    line-height: 1.6;
+  }
+  #flow .flow-sub b { color: var(--text); font-weight: 600; }
+
+  .flow-row {
+    margin-top: 64px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    align-items: stretch;
+    gap: 0;
+  }
+  @media (max-width: 1000px) {
+    .flow-row {
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .flow-row .h-arrow { display: none; }
+  }
+  @media (max-width: 600px) {
+    .flow-row { grid-template-columns: 1fr; }
+  }
+
+  .flow-card {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 26px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    position: relative;
+    min-height: 200px;
+  }
+  .flow-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,122,77,0.4);
+    background: var(--bg-3);
+  }
+  .flow-card .step-num {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flow-card .step-num::before {
+    content: '';
+    width: 18px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .flow-card h3 {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .flow-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .flow-card .icon {
+    margin-top: auto;
+    width: 32px;
+    height: 32px;
+    color: var(--bb);
+    opacity: 0.85;
+  }
+
+  .h-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    color: var(--muted-2);
+  }
+  .h-arrow svg { width: 28px; height: 14px; }
+
+  /* ============================================
+     4p · ROLES (Venn-style overlap)
+     ============================================ */
+  #roles {
+    padding-top: 140px;
+    padding-bottom: 140px;
+    align-items: center;
+  }
+  #roles .container { text-align: center; }
+
+  .roles-stage {
+    margin-top: 80px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  /* Venn diagram container */
+  .venn {
+    position: relative;
+    width: clamp(440px, 56vw, 720px);
+    height: clamp(280px, 32vw, 380px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  @media (max-width: 540px) {
+    .venn {
+      width: 100%;
+      height: 380px;
+    }
+  }
+
+  .role-circle {
+    position: absolute;
+    width: clamp(220px, 30vw, 360px);
+    height: clamp(220px, 30vw, 360px);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    transition: transform 0.3s;
+    backdrop-filter: blur(2px);
+  }
+
+  .role-circle.brand {
+    left: 0;
+    background: radial-gradient(circle at 35% 35%, rgba(93,138,255,0.32) 0%, rgba(93,138,255,0.08) 60%, rgba(93,138,255,0.02) 100%);
+    border: 1.5px solid rgba(93,138,255,0.55);
+    box-shadow:
+      0 0 80px -10px rgba(93,138,255,0.45),
+      inset 0 0 60px rgba(93,138,255,0.08);
+    z-index: 1;
+  }
+  .role-circle.bb {
+    right: 0;
+    background: radial-gradient(circle at 65% 35%, rgba(255,122,77,0.32) 0%, rgba(255,90,138,0.08) 60%, rgba(255,90,138,0.02) 100%);
+    border: 1.5px solid rgba(255,122,77,0.55);
+    box-shadow:
+      0 0 80px -10px rgba(255,122,77,0.45),
+      inset 0 0 60px rgba(255,122,77,0.08);
+    z-index: 1;
+  }
+
+  /* Overlap glow node (centered) */
+  .venn-overlap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--grad-text);
+    box-shadow:
+      0 0 60px 12px rgba(255,122,77,0.5),
+      0 0 100px 30px rgba(255,90,138,0.25);
+    z-index: 2;
+    animation: pulseGlow 3s ease-in-out infinite;
+  }
+  @keyframes pulseGlow {
+    0%, 100% {
+      box-shadow:
+        0 0 60px 12px rgba(255,122,77,0.5),
+        0 0 100px 30px rgba(255,90,138,0.25);
+    }
+    50% {
+      box-shadow:
+        0 0 70px 16px rgba(255,122,77,0.65),
+        0 0 130px 40px rgba(255,90,138,0.35);
+    }
+  }
+  .venn-overlap::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    background: var(--bg);
+  }
+  .venn-overlap::after {
+    content: '×';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 28px;
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Inner content of each circle - positioned to avoid overlap */
+  .role-circle .inner {
+    width: 70%;
+  }
+  .role-circle.brand .inner { transform: translateX(-15%); }
+  .role-circle.bb .inner { transform: translateX(15%); }
+
+  .role-circle .role-tag {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .role-circle .role-name {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: clamp(26px, 3vw, 36px);
+    letter-spacing: -0.025em;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .role-circle.brand .role-name { color: var(--bb-2); }
+  .role-circle.bb .role-name {
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .role-circle .role-give {
+    font-size: clamp(13px, 1.15vw, 15px);
+    color: var(--text-soft);
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: -0.005em;
+  }
+
+  /* Down arrow + result */
+  .role-down-arrow {
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+  }
+  .role-down-arrow svg { width: 22px; height: 36px; }
+  .role-down-arrow span {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .role-result {
+    width: clamp(260px, 30vw, 340px);
+    height: clamp(260px, 30vw, 340px);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 28px;
+    background:
+      radial-gradient(circle at 50% 30%, rgba(255,122,77,0.25) 0%, rgba(255,90,138,0.08) 60%, transparent 100%),
+      var(--bg-2);
+    position: relative;
+    box-shadow:
+      0 0 100px -10px rgba(255,122,77,0.4),
+      inset 0 0 60px rgba(255,122,77,0.08);
+  }
+  .role-result::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    padding: 2px;
+    background: var(--grad-text);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .role-result .result-tag {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .role-result .result-name {
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: clamp(36px, 4.4vw, 56px);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* ============================================
+     5p · CALCULATOR
+     ============================================ */
+  #calc {
+    padding-top: 130px;
+    padding-bottom: 140px;
+  }
+  .calc-fxnote {
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .calc-fxnote b { color: var(--text); font-weight: 500; }
+
+  .tabs {
+    display: inline-flex;
+    margin-top: 36px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px;
+  }
+  .tab {
+    padding: 10px 22px;
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--muted);
+    cursor: pointer;
+    letter-spacing: -0.005em;
+    transition: all 0.2s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    background: var(--accent);
+    color: #fff;
+  }
+  .tab .num {
+    font-family: var(--mono);
+    margin-right: 6px;
+    opacity: 0.7;
+  }
+  .tab.active .num { opacity: 1; }
+
+  .calc-grid {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: 18px;
+  }
+  @media (max-width: 880px) {
+    .calc-grid { grid-template-columns: 1fr; }
+  }
+
+  .calc-input {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 30px;
+  }
+  .calc-input h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 22px;
+  }
+
+  .field { margin-bottom: 20px; }
+  .field-label {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .field-label .name {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .field-label .hint {
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+  .field-label .hint b {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .input-wrap input[type="number"] {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-family: var(--mono);
+    font-size: 17px;
+    background: var(--bg);
+    color: var(--text);
+    transition: border-color 0.2s;
+    text-align: right;
+  }
+  .input-wrap input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(255,122,77,0.15);
+  }
+  .input-wrap .currency,
+  .input-wrap .suffix {
+    position: absolute;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 13px;
+    pointer-events: none;
+  }
+  .input-wrap .currency { left: 16px; }
+  .input-wrap .suffix { right: 16px; }
+  .input-wrap.left-pad input { padding-left: 52px; }
+
+  .field-krw {
+    margin-top: 6px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    text-align: right;
+    min-height: 1.2em;
+  }
+
+  .fixed-block {
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+  .fixed-block h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    margin: 0 0 14px 0;
+  }
+  .fixed-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    padding: 9px 0;
+    border-bottom: 1px dashed var(--line);
+    font-size: 13.5px;
+  }
+  .fixed-row:last-child { border-bottom: 0; }
+  .fixed-row .k { color: var(--muted); }
+  .fixed-row .k b { color: var(--text); font-weight: 500; }
+  .fixed-row .v {
+    font-family: var(--mono);
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .calc-output {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .out-final {
+    background: var(--grad-glow);
+    border: 1px solid rgba(255,122,77,0.45);
+    border-radius: 12px;
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .out-final::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 90% 0%, rgba(255,122,77,0.12), transparent 50%);
+    pointer-events: none;
+  }
+  .out-final .lab {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-weight: 500;
+    position: relative;
+  }
+  .out-final .lab .mode-badge {
+    color: rgba(255,255,255,0.5);
+    margin-left: 4px;
+  }
+  .out-final .num-mxn {
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: clamp(48px, 6vw, 76px);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    background: var(--grad-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    position: relative;
+  }
+  .out-final .num-mxn .cur {
+    font-size: 0.4em;
+    margin-right: 10px;
+    font-weight: 500;
+    -webkit-text-fill-color: var(--muted);
+    color: var(--muted);
+    background: none;
+    letter-spacing: 0.05em;
+  }
+  .out-final .num-krw {
+    margin-top: 8px;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    position: relative;
+  }
+  .out-final .pct {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    position: relative;
+  }
+  .out-final .pct .v {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .out-breakdown {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 22px 26px;
+  }
+  .out-breakdown h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    margin: 0 0 12px 0;
+  }
+  .out-breakdown h4 .mode {
+    color: var(--accent);
+    margin-left: 6px;
+  }
+  .out-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    gap: 14px;
+  }
+  .out-row:last-child { border-bottom: 0; }
+  .out-row .k {
+    font-size: 13.5px;
+    color: var(--text);
+  }
+  .out-row .k .desc {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .out-row .v-mxn {
+    font-family: var(--mono);
+    font-size: 14px;
+    text-align: right;
+    min-width: 100px;
+    color: var(--text);
+  }
+  .out-row .v-krw {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    text-align: right;
+    min-width: 90px;
+  }
+  .out-row.minus .v-mxn::before {
+    content: '−';
+    margin-right: 3px;
+    color: var(--muted);
+  }
+  .out-row.plus .v-mxn {
+    color: var(--bb);
+    font-weight: 500;
+  }
+
+  .admin-foot {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+  .admin-foot h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0 0 12px 0;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .admin-foot h4 b { color: var(--text); font-weight: 500; }
+  .admin-foot ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 24px;
+  }
+  @media (max-width: 600px) {
+    .admin-foot ul { grid-template-columns: 1fr; }
+  }
+  .admin-foot ul li {
+    font-size: 12.5px;
+    color: var(--text);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .admin-foot ul li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .admin-foot ul li b { font-weight: 500; }
+  .admin-foot ul li span {
+    color: var(--muted);
+    font-size: 11px;
+    margin-left: 4px;
+  }
+
+  /* page-num */
+  .page-num {
+    position: absolute;
+    bottom: 28px;
+    right: var(--pad);
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    color: var(--muted-2);
+    text-transform: uppercase;
+  }
+
+  .page-ind {
+    position: fixed;
+    right: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  @media (max-width: 760px) { .page-ind { display: none; } }
+  .page-ind a {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--line);
+    transition: all 0.25s;
+    position: relative;
+  }
+  .page-ind a:hover { background: var(--text-soft); }
+  .page-ind a.active { background: var(--accent); transform: scale(1.4); }
+  .page-ind a span {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--text);
+    color: var(--bg);
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    font-weight: 500;
+  }
+  .page-ind a:hover span { opacity: 1; }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<nav class="topbar">
+  <div class="brand">
+    <span class="logo">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14.5 6.5 L14.5 17 L21 17 Z" stroke="white" stroke-width="2.2" stroke-linejoin="round" fill="white"/>
+        <path d="M7 19 L25 19 L23 24 L9 24 Z" fill="white" stroke="white" stroke-width="1.4" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    Blueboat
+  </div>
+  <div class="meta"><span class="dot"></span>Mexico D2C · 2026</div>
+</nav>
+
+<!-- Page indicator -->
+<div class="page-ind" id="pageInd">
+  <a href="#cover"><span>표지</span></a>
+  <a href="#convert"><span>전환</span></a>
+  <a href="#flow"><span>구매 플로우</span></a>
+  <a href="#roles"><span>역할</span></a>
+  <a href="#calc"><span>계산기</span></a>
+</div>
+
+<!-- 1p · COVER -->
+<section id="cover">
+  <div class="container cover-wrap">
+    <div class="cover-logo-row fade-in">
+      <div class="cover-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14.5 6.5 L14.5 17 L21 17 Z" stroke="white" stroke-width="2.2" stroke-linejoin="round" fill="white"/>
+          <path d="M7 19 L25 19 L23 24 L9 24 Z" fill="white" stroke="white" stroke-width="1.4" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="cover-wordmark">Blueboat</div>
+    </div>
+
+    <h1 class="cover-title fade-in">
+      멕시코 직구<span class="grad">(D2C)</span><br>
+      진행 제안
+    </h1>
+
+    <p class="cover-sub fade-in">
+      Blueboat 인프라를 통한<br>
+      <b>멕시코 트래픽</b> <span class="arrow">→</span> <b>매출 전환</b>
+    </p>
+  </div>
+
+  <div class="page-num">— 01 / 05</div>
+</section>
+
+<!-- 2p · CONVERSION (re-designed in HTML) -->
+<section id="convert">
+  <div class="container">
+    <div class="section-label fade-in">SECTION 02</div>
+
+    <h2 class="display fade-in">
+      Blueboat 를 통한 <span class="grad">전환</span>
+    </h2>
+
+    <div class="convert-stage fade-in">
+
+      <!-- LEFT · Insight cards stacked -->
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+
+        <!-- Instagram card -->
+        <div class="data-card">
+          <div class="head">
+            <div class="src">
+              <span class="ico ig">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="5"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/>
+                </svg>
+              </span>
+              Instagram
+            </div>
+            <div class="period">2024.5.20 — 6.16</div>
+          </div>
+
+          <div class="metric-grid">
+            <div class="metric"><div class="label">팔로워</div><div class="val">128,934 <small>↑ 6.7%</small></div></div>
+            <div class="metric"><div class="label">도달</div><div class="val">2.48M <small>↑ 18.3%</small></div></div>
+            <div class="metric"><div class="label">참여도</div><div class="val">6.32% <small>↑ 15.4%</small></div></div>
+            <div class="metric"><div class="label">웹사이트 클릭</div><div class="val">8,245 <small>↑ 9.8%</small></div></div>
+          </div>
+
+          <div>
+            <div style="font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;">국가별 트래픽</div>
+            <div class="country-list">
+              <div class="country-row">
+                <span class="rank">1</span>
+                <span class="name"><span class="flag us"></span>United States</span>
+                <span class="users">152,306</span>
+                <span class="pct">31.6%</span>
+              </div>
+              <div class="country-row highlight">
+                <span class="rank">2</span>
+                <span class="name"><span class="flag mx"></span>Mexico</span>
+                <span class="users">96,872</span>
+                <span class="pct">20.1%</span>
+              </div>
+              <div class="country-row">
+                <span class="rank">3</span>
+                <span class="name"><span class="flag kr"></span>South Korea</span>
+                <span class="users">61,643</span>
+                <span class="pct">12.8%</span>
+              </div>
+              <div class="country-row">
+                <span class="rank">4</span>
+                <span class="name"><span class="flag br"></span>Brazil</span>
+                <span class="users">48,259</span>
+                <span class="pct">10.0%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- YouTube card -->
+        <div class="data-card">
+          <div class="head">
+            <div class="src">
+              <span class="ico yt">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M21.6 7.2c-.2-.9-.9-1.6-1.8-1.8C18 5 12 5 12 5s-6 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 9 2 12 2 12s0 3 .4 4.8c.2.9.9 1.6 1.8 1.8C6 19 12 19 12 19s6 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.8.4-4.8.4-4.8s0-3-.4-4.8zM10 15.5v-7l5.5 3.5L10 15.5z"/>
+                </svg>
+              </span>
+              YouTube
+            </div>
+            <div class="period">28일 기준</div>
+          </div>
+
+          <div class="metric-grid">
+            <div class="metric"><div class="label">조회수</div><div class="val">1.24M <small>↑ 12.3%</small></div></div>
+            <div class="metric"><div class="label">시청 시간 (시간)</div><div class="val">68,432 <small>↑ 15.8%</small></div></div>
+            <div class="metric"><div class="label">구독자</div><div class="val">+12,845 <small>↑ 9.1%</small></div></div>
+            <div class="metric"><div class="label">예상 수익</div><div class="val">$1,143 <small>↑ 10.7%</small></div></div>
+          </div>
+
+          <div>
+            <div style="font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;">국가별 조회수</div>
+            <div class="country-list">
+              <div class="country-row highlight">
+                <span class="rank">1</span>
+                <span class="name"><span class="flag mx"></span>Mexico</span>
+                <span class="users">182,106</span>
+                <span class="pct">14.8%</span>
+              </div>
+              <div class="country-row">
+                <span class="rank">2</span>
+                <span class="name"><span class="flag us"></span>United States</span>
+                <span class="users">128,120</span>
+                <span class="pct">10.4%</span>
+              </div>
+              <div class="country-row">
+                <span class="rank">3</span>
+                <span class="name"><span class="flag kr"></span>South Korea</span>
+                <span class="users">98,442</span>
+                <span class="pct">7.9%</span>
+              </div>
+              <div class="country-row">
+                <span class="rank">4</span>
+                <span class="name"><span class="flag br"></span>Brazil</span>
+                <span class="users">76,442</span>
+                <span class="pct">7.9%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MIDDLE · Arrow flow with Blueboat node -->
+      <div class="v-arrow">
+        <div class="arrow-up">
+          <svg viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 26 L10 6 M3 12 L10 4 L17 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="blueboat-node">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14.5 6.5 L14.5 17 L21 17 Z" stroke="white" stroke-width="2.2" stroke-linejoin="round" fill="white"/>
+            <path d="M7 19 L25 19 L23 24 L9 24 Z" fill="white" stroke="white" stroke-width="1.4" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="label-bb">Blueboat</div>
+        <div class="arrow-down">
+          <svg viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 2 L10 22 M3 16 L10 24 L17 16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- RIGHT · Result -->
+      <div class="result-stack">
+
+        <div class="result-headline">
+          멕시코 트래픽이<br>
+          <span class="grad">매출로 전환</span>됩니다
+        </div>
+
+        <div class="result-card">
+          <div class="lab">전환 시뮬레이션</div>
+          <div class="row">
+            <span class="k">멕시코 월 트래픽</span>
+            <span class="v">~280K</span>
+          </div>
+          <div class="row">
+            <span class="k">예시 전환율</span>
+            <span class="v">2.0%</span>
+          </div>
+          <div class="row">
+            <span class="k">월 예상 주문</span>
+            <span class="v">~165 건</span>
+          </div>
+          <div class="row big">
+            <span class="k">월 예상 매출</span>
+            <span class="v">~107K MXN</span>
+          </div>
+          <div class="note">
+            ≈ ₩ 9,095,000 / 평균 객단가 650 MXN 기준
+          </div>
+        </div>
+
+        <p class="result-foot">
+          이미 발생 중인 오가닉 트래픽,<br>
+          <b>광고비 추가 0원</b>으로 매출이 만들어집니다.
+        </p>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page-num">— 02 / 05</div>
+</section>
+
+<!-- 3p · FLOW -->
+<section id="flow">
+  <div class="container">
+    <div class="section-label fade-in">SECTION 03</div>
+
+    <h2 class="display fade-in">
+      <span class="grad">구매</span> 플로우
+    </h2>
+
+    <p class="flow-sub fade-in" style="margin-top: 18px;">
+      멕시코 판매에 필요한 <b>각종 규제 및 절차</b>는 Blueboat에서 해결합니다.
+    </p>
+
+    <div class="flow-row fade-in">
+
+      <div class="flow-card">
+        <span class="step-num">STEP 01</span>
+        <h3>브랜드 콘텐츠</h3>
+        <p>인스타그램·틱톡·유튜브를 통한 발견 및 구매 결심</p>
+        <svg class="icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="6" y="4" width="20" height="24" rx="3"/>
+          <circle cx="16" cy="16" r="5"/>
+          <circle cx="22" cy="9" r="1" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <div class="h-arrow">
+        <svg viewBox="0 0 28 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 7 L24 7 M18 2 L26 7 L18 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <div class="flow-card">
+        <span class="step-num">STEP 02</span>
+        <h3>전용 결제 링크</h3>
+        <p>브랜드별·인플루언서별로 나눠 발급, 스페인어</p>
+        <svg class="icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13 19l-4 4 4 4 M19 13l4-4-4-4 M9 23h14a4 4 0 004-4V13a4 4 0 00-4-4H9a4 4 0 00-4 4v6a4 4 0 004 4z"/>
+        </svg>
+      </div>
+
+      <div class="h-arrow">
+        <svg viewBox="0 0 28 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 7 L24 7 M18 2 L26 7 L18 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <div class="flow-card">
+        <span class="step-num">STEP 03</span>
+        <h3>고객 구매</h3>
+        <p>멕시코 페소, 멕시코 결제수단</p>
+        <svg class="icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="9" width="24" height="16" rx="2"/>
+          <path d="M4 14h24 M9 20h4"/>
+          <circle cx="22" cy="20" r="1.5"/>
+        </svg>
+      </div>
+
+      <div class="h-arrow">
+        <svg viewBox="0 0 28 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 7 L24 7 M18 2 L26 7 L18 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <div class="flow-card">
+        <span class="step-num">STEP 04</span>
+        <h3>제품 발송</h3>
+        <p>Blueboat가 구매 확인 및 라스트마일 발송</p>
+        <svg class="icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 22V11h15v11 M19 15h6l3 4v3h-9"/>
+          <circle cx="10" cy="24" r="2.5"/>
+          <circle cx="23" cy="24" r="2.5"/>
+        </svg>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page-num">— 03 / 05</div>
+</section>
+
+<!-- 4p · ROLES (Venn diagram) -->
+<section id="roles">
+  <div class="container">
+    <div class="section-label fade-in" style="justify-content: center;">SECTION 04</div>
+
+    <h2 class="display fade-in">
+      <span class="grad">역할</span> 분담
+    </h2>
+
+    <div class="roles-stage fade-in">
+
+      <div class="venn">
+        <div class="role-circle brand">
+          <div class="inner">
+            <div class="role-tag">Brand</div>
+            <div class="role-name">브랜드</div>
+            <div class="role-give">트래픽 제공</div>
+          </div>
+        </div>
+
+        <div class="role-circle bb">
+          <div class="inner">
+            <div class="role-tag">Blueboat</div>
+            <div class="role-name">블루보트</div>
+            <div class="role-give">결제 수단·배송 제공</div>
+          </div>
+        </div>
+
+        <div class="venn-overlap"></div>
+      </div>
+
+      <div class="role-down-arrow">
+        <span>Result</span>
+        <svg viewBox="0 0 22 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 4 L11 28 M4 22 L11 30 L18 22" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <div class="role-result">
+        <div class="result-tag">Result</div>
+        <div class="result-name">멕시코 매출</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page-num">— 04 / 05</div>
+</section>
+
+<!-- 5p · CALCULATOR -->
+<section id="calc" class="no-border">
+  <div class="container">
+    <div class="section-label fade-in">SECTION 05</div>
+
+    <h2 class="display fade-in">
+      Blueboat 직구 <span class="grad">계산기</span>
+    </h2>
+    <p class="calc-fxnote fade-in">
+      ※ 기준 환율 <b>1 MXN = 85원</b> (2026.5 기준)
+    </p>
+
+    <div class="fade-in">
+      <div class="tabs">
+        <button class="tab active" data-mode="direct"><span class="num">A</span>브랜드 채널 직접</button>
+        <button class="tab" data-mode="group"><span class="num">B</span>공동 구매</button>
+      </div>
+    </div>
+
+    <div class="calc-grid fade-in">
+
+      <div class="calc-input">
+        <h3>입력 항목</h3>
+
+        <div class="field">
+          <div class="field-label">
+            <span class="name">판매가</span>
+            <span class="hint"><b>브랜드 입력</b> · MXN</span>
+          </div>
+          <div class="input-wrap left-pad">
+            <span class="currency">MXN</span>
+            <input id="price" type="number" value="650" min="0" step="10" />
+          </div>
+          <div class="field-krw" id="priceKrw"></div>
+        </div>
+
+        <div class="field group-only" style="display:none;">
+          <div class="field-label">
+            <span class="name">진행 갯수</span>
+            <span class="hint"><b>브랜드 입력</b> · 개</span>
+          </div>
+          <div class="input-wrap">
+            <input id="qty" type="number" value="50" min="1" step="1" />
+            <span class="suffix">개</span>
+          </div>
+        </div>
+
+        <div class="field group-only" style="display:none;">
+          <div class="field-label">
+            <span class="name">인플루언서 수수료</span>
+            <span class="hint"><b>브랜드 입력</b> · %</span>
+          </div>
+          <div class="input-wrap">
+            <input id="infl" type="number" value="15" min="0" max="50" step="0.5" />
+            <span class="suffix">%</span>
+          </div>
+        </div>
+
+        <div class="fixed-block">
+          <h4>고정 항목</h4>
+          <div class="fixed-row">
+            <span class="k"><b>판매 관리비</b> · 정률</span>
+            <span class="v">20.0 %</span>
+          </div>
+          <div class="fixed-row">
+            <span class="k"><b>Blueboat 수수료</b> · 정률</span>
+            <span class="v">18.5 %</span>
+          </div>
+          <div class="fixed-row">
+            <span class="k"><b>배송비</b> · 정액</span>
+            <span class="v" id="shipLabel">120 MXN</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-output">
+
+        <div class="out-final">
+          <div class="lab">최종 정산 금액 <span class="mode-badge" id="modeBadge">— 브랜드 채널</span></div>
+          <div class="num-mxn"><span class="cur">MXN</span><span id="finalMxn">—</span></div>
+          <div class="num-krw" id="finalKrw">≈ — 원</div>
+          <div class="pct">
+            <span>판매가 대비 정산 비율</span>
+            <span class="v" id="marginPct">— %</span>
+          </div>
+        </div>
+
+        <div class="out-breakdown">
+          <h4>정산 내역 <span class="mode" id="modeLabel">— 브랜드 채널</span></h4>
+
+          <div class="out-row plus">
+            <div class="k">총 매출
+              <span class="desc" id="revDesc">판매가 × 1개</span>
+            </div>
+            <div class="v-mxn" id="revMxn">— MXN</div>
+            <div class="v-krw" id="revKrw">— 원</div>
+          </div>
+
+          <div class="out-row minus group-only" style="display:none;">
+            <div class="k">인플루언서 수수료
+              <span class="desc" id="inflDesc">총 매출의 15.0%</span>
+            </div>
+            <div class="v-mxn" id="inflMxn">— MXN</div>
+            <div class="v-krw" id="inflKrw">— 원</div>
+          </div>
+
+          <div class="out-row minus">
+            <div class="k">판매 관리비
+              <span class="desc">총 매출의 20.0%</span>
+            </div>
+            <div class="v-mxn" id="adminMxn">— MXN</div>
+            <div class="v-krw" id="adminKrw">— 원</div>
+          </div>
+
+          <div class="out-row minus">
+            <div class="k">Blueboat 수수료
+              <span class="desc">총 매출의 18.5%</span>
+            </div>
+            <div class="v-mxn" id="bbMxn">— MXN</div>
+            <div class="v-krw" id="bbKrw">— 원</div>
+          </div>
+
+          <div class="out-row minus">
+            <div class="k">배송비
+              <span class="desc" id="shipDesc">건당 120 MXN</span>
+            </div>
+            <div class="v-mxn" id="shipMxn">— MXN</div>
+            <div class="v-krw" id="shipKrw">— 원</div>
+          </div>
+        </div>
+
+        <div class="admin-foot">
+          <h4><b>판매 관리비 20%</b> 포함 항목</h4>
+          <ul>
+            <li><b>결제 수수료</b> <span>카드·현지결제</span></li>
+            <li><b>세금 등 행정 비용</b> <span>통관·신고</span></li>
+            <li><b>정산 / 환전 수수료</b> <span>MXN → KRW</span></li>
+            <li><b>기타 비용</b> <span>CS·반품·보험</span></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-num">— 05 / 05</div>
+</section>
+
+<script>
+  const fmtMXN = v => isFinite(v)
+    ? new Intl.NumberFormat('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(v)
+    : '—';
+  const fmtKRW = v => isFinite(v)
+    ? '₩ ' + new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 }).format(Math.round(v))
+    : '— 원';
+  const fmtPct = v => isFinite(v)
+    ? new Intl.NumberFormat('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 }).format(v) + ' %'
+    : '— %';
+
+  const FX = 85;
+  const ADMIN_RATE = 0.20;
+  const BB_RATE = 0.185;
+  const SHIP_DIRECT = 120;
+  const SHIP_GROUP = 75;
+
+  let mode = 'direct';
+  const tabs = document.querySelectorAll('.tab');
+  const groupOnly = document.querySelectorAll('.group-only');
+  const $ = id => document.getElementById(id);
+
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    mode = t.dataset.mode;
+    groupOnly.forEach(el => el.style.display = (mode === 'group') ? '' : 'none');
+    const lbl = (mode === 'group') ? '— 공동 구매' : '— 브랜드 채널';
+    $('modeLabel').textContent = lbl;
+    $('modeBadge').textContent = lbl;
+    $('shipLabel').textContent = (mode === 'group') ? '75 MXN' : '120 MXN';
+    calc();
+  }));
+
+  function calc() {
+    const price = parseFloat($('price').value) || 0;
+    const qty = (mode === 'group') ? Math.max(1, parseInt($('qty').value) || 1) : 1;
+    const inflPct = (mode === 'group') ? (parseFloat($('infl').value) || 0) / 100 : 0;
+    const ship = (mode === 'group') ? SHIP_GROUP : SHIP_DIRECT;
+
+    $('priceKrw').textContent = price > 0 ? '≈ ' + fmtKRW(price * FX) : '';
+
+    const revenue = price * qty;
+    $('revMxn').textContent = fmtMXN(revenue) + ' MXN';
+    $('revKrw').textContent = fmtKRW(revenue * FX);
+    $('revDesc').textContent = (mode === 'group')
+      ? `판매가 ${fmtMXN(price)} × ${qty}개`
+      : '판매가 × 1개';
+
+    const inflFee = revenue * inflPct;
+    if (mode === 'group') {
+      $('inflMxn').textContent = fmtMXN(inflFee) + ' MXN';
+      $('inflKrw').textContent = fmtKRW(inflFee * FX);
+      $('inflDesc').textContent = `총 매출의 ${(inflPct * 100).toFixed(1)}%`;
+    }
+
+    const admin = revenue * ADMIN_RATE;
+    $('adminMxn').textContent = fmtMXN(admin) + ' MXN';
+    $('adminKrw').textContent = fmtKRW(admin * FX);
+
+    const bbFee = revenue * BB_RATE;
+    $('bbMxn').textContent = fmtMXN(bbFee) + ' MXN';
+    $('bbKrw').textContent = fmtKRW(bbFee * FX);
+
+    const shipping = ship * qty;
+    $('shipMxn').textContent = fmtMXN(shipping) + ' MXN';
+    $('shipKrw').textContent = fmtKRW(shipping * FX);
+    $('shipDesc').textContent = (mode === 'group')
+      ? `건당 ${ship} MXN × ${qty}개`
+      : `건당 ${ship} MXN`;
+
+    const final = revenue - inflFee - admin - bbFee - shipping;
+    $('finalMxn').textContent = fmtMXN(final);
+    $('finalKrw').textContent = '≈ ' + fmtKRW(final * FX);
+    const margin = revenue > 0 ? (final / revenue) * 100 : NaN;
+    $('marginPct').textContent = fmtPct(margin);
+  }
+
+  ['price', 'qty', 'infl'].forEach(id => {
+    const el = $(id);
+    if (el) el.addEventListener('input', calc);
+  });
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+  const sections = document.querySelectorAll('section');
+  const indLinks = document.querySelectorAll('#pageInd a');
+  const indObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        indLinks.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.5 });
+  sections.forEach(s => indObs.observe(s));
+
+  calc();
+</script>
+
+</body>
+</html>
